@@ -1,23 +1,28 @@
+//require("dotenv").config();
+//const keys = require("./keys.js");
 let action = process.argv[2]
 let value = process.argv.slice(3)
 const axios = require('axios')
-const spotify = require('node-spotify-api')
 const moment = require('moment')
 
 
-if(action === "song"){
-    console.log('searching for song', value)
+//couldn't get spotify api to work
+if(action === "spotify-this"){
+   console.log('searching for song', value)
+   let spotifyURL = 'https://api.spotify.com/v1/search?q=' + value +'&type=track&limit=1'
+   //var spotify = new Spotify(keys.spotify);
    spotify
-   .get('https://api.spotify.com/v1/tracks/q=' + value)
-   .then(function(data){
-       console.log(data)
+   .get(spotifyURL)
+   .then(function(response){
+       console.log(response.data)
    })
    .catch(function(err){
        console.log('error' + err)
    })
 }
 
-if(action === "band"){
+if(action === "concert-this"){
+    
     console.log('searching for band', value)
     let URL = "https://rest.bandsintown.com/artists/"+ value.join('+') +"/events?app_id=codingbootcamp"
     axios.get(URL)
@@ -34,7 +39,7 @@ if(action === "band"){
     })
 }
 
-if(action === "movie"){
+if(action === "movie-this"){
     console.log('searching for movie', value)
     URL = "http://www.omdbapi.com/?t="+value.join('+')+"&y=&plot=short&apikey=92262c7b"
     axios.get(URL)
@@ -48,11 +53,13 @@ if(action === "movie"){
         console.log('Plot:', response.data.Plot)
         console.log('Actors:' , response.data.Actors)
 
-
+    
     })
+
     .catch(function(err){
         if(err){
             console.log(err)
         }
     })
+  
 }    
